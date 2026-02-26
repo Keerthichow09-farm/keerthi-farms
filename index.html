@@ -1,1 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keerthi Farms</title>
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 20px;
+        }
+
+        .products {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px;
+        }
+
+        .product-box {
+            background: white;
+            width: 250px;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        .product-box img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        button {
+            background-color: #ff9800;
+            border: none;
+            padding: 8px 15px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #e68900;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .popup-content {
+            background: white;
+            width: 320px;
+            padding: 20px;
+            margin: 100px auto;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        .total {
+            font-weight: bold;
+            margin-top: 10px;
+            color: green;
+        }
+
+        .close {
+            background: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌾 Keerthi Farms</h1>
+    <p>Fresh & Natural Farm Products</p>
+</header>
+
+<div class="products">
+
+    <div class="product-box">
+        <img src="images/Milk.png">
+        <h3>🥛 Fresh Milk</h3>
+        <p>₹50 per Litre</p>
+        <button onclick="openForm('Milk', 50)">Order Now</button>
+    </div>
+
+    <div class="product-box">
+        <img src="images/Eggs.png">
+        <h3>🥚 Eggs</h3>
+        <p>₹180 per Tray</p>
+        <button onclick="openForm('Eggs', 180)">Order Now</button>
+    </div>
+
+    <div class="product-box">
+        <img src="images/Hens.png">
+        <h3>🐔 Country Hen</h3>
+        <p>₹400 per Kg</p>
+        <button onclick="openForm('Country Hen', 400)">Order Now</button>
+    </div>
+
+    <div class="product-box">
+        <img src="images/Quails.png">
+        <h3>🐦 Quail Birds</h3>
+        <p>₹250 each</p>
+        <button onclick="openForm('Quail Birds', 250)">Order Now</button>
+    </div>
+
+</div>
+
+<div class="popup" id="orderPopup">
+    <div class="popup-content">
+        <h3>Enter Details</h3>
+        <input type="text" id="name" placeholder="Your Name">
+        <input type="text" id="mobile" placeholder="Mobile Number">
+        <input type="number" id="quantity" placeholder="Quantity" oninput="calculateTotal()">
+        <div class="total" id="totalAmount">Total: ₹0</div>
+        <button onclick="sendWhatsApp()">Submit Order</button>
+        <button class="close" onclick="closeForm()">Close</button>
+    </div>
+</div>
+
+<script>
+
+let selectedProduct = "";
+let selectedPrice = 0;
+
+function openForm(product, price) {
+    selectedProduct = product;
+    selectedPrice = price;
+    document.getElementById("orderPopup").style.display = "block";
+}
+
+function closeForm() {
+    document.getElementById("orderPopup").style.display = "none";
+}
+
+function calculateTotal() {
+    let quantity = document.getElementById("quantity").value;
+    let total = quantity * selectedPrice;
+    document.getElementById("totalAmount").innerText = "Total: ₹" + total;
+}
+
+function sendWhatsApp() {
+
+    let name = document.getElementById("name").value;
+    let mobile = document.getElementById("mobile").value;
+    let quantity = document.getElementById("quantity").value;
+    let total = quantity * selectedPrice;
+
+    if(name === "" || mobile === "" || quantity === "") {
+        alert("Please fill all details");
+        return;
+    }
+
+    let message = "🛒 *New Order - Keerthi Farms* %0A%0A" +
+                  "👤 Name: " + name + "%0A" +
+                  "📱 Mobile: " + mobile + "%0A" +
+                  "📦 Product: " + selectedProduct + "%0A" +
+                  "🔢 Quantity: " + quantity + "%0A" +
+                  "💰 Total Amount: ₹" + total;
+
+    let phoneNumber = "919177960664";
+
+    let whatsappURL = "https://api.whatsapp.com/send?phone=" 
+                      + phoneNumber + 
+                      "&text=" + message;
+
+    window.open(whatsappURL, "_blank");
+}
+
+</script>
+
+</body>
+</html>
